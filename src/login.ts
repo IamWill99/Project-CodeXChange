@@ -61,3 +61,36 @@ async function loginFromDatabase(username: string, password: string): Promise<Ar
 
 // Roep de setup functie aan als de pagina is geladen
 setup();
+
+// Met deze functie kan de User een account aanmaken op de registratiewebsite. Er zijn drie velden
+// waar de gebruiker zijn/haar naam, email en wachtwoord invult. Deze gegevens worden vervolgens opgeslagen
+// in de database. Zo kunnen ze deze gegevens gebruiken om later in te loggen.
+
+function createUser(): void {
+    const gebruikersnaamInput: HTMLInputElement = document.querySelector("#usernameregistreer") as HTMLInputElement;
+    const gebruikersnaam: string = gebruikersnaamInput.value;
+    const EmailInput: HTMLInputElement = document.querySelector("#emailregistreer") as HTMLInputElement;
+    const Email: string = EmailInput.value;
+    const WachtwoordInput: HTMLInputElement = document.querySelector("#passwordregistreer") as HTMLInputElement;
+    const Wachtwoord: string = WachtwoordInput.value;
+    const firstnameInput: HTMLInputElement = document.querySelector("#firstname") as HTMLInputElement;
+    const firstname: string = firstnameInput.value;
+    const lastnameInput: HTMLInputElement = document.querySelector("#lastname") as HTMLInputElement;
+    const lastname: string = lastnameInput.value;
+
+
+    // Hier worden de ingevulde velden naar de database gestuurd met de "INSERT INTO" functie. De console log
+    // geeft vervolgens de "account is aangemaakt" melding.
+   
+    const waaromwerkthetniet: string = "INSERT INTO user (username, password, email, firstname, lastname) VALUES (?, ?, ?, ?, ?)";
+    api.queryDatabase(waaromwerkthetniet, gebruikersnaam, Wachtwoord, Email, firstname, lastname);
+    console.log("Account is aangemaakt.", gebruikersnaam);
+}
+
+// Dit is betreft de registreerknop op de website. Deze lijn code reageert als de user op de knop drukt
+// en activeerd de CreateUser functie die hierboven staat.
+
+const registreerknop: HTMLButtonElement = document.querySelector("#registreerButton") as HTMLButtonElement;
+registreerknop.addEventListener("click", createUser);
+
+
