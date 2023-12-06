@@ -78,6 +78,7 @@ function createUser(): void {
     const lastnameInput: HTMLInputElement = document.querySelector("#lastname") as HTMLInputElement;
     const lastname: string = lastnameInput.value;
 
+// if statement 
 
     // Hier worden de ingevulde velden naar de database gestuurd met de "INSERT INTO" functie. De console log
     // geeft vervolgens de "account is aangemaakt" melding.
