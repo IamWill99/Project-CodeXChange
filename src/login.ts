@@ -78,6 +78,26 @@ function createUser(): void {
     const lastnameInput: HTMLInputElement = document.querySelector("#lastname") as HTMLInputElement;
     const lastname: string = lastnameInput.value;
 
+    if (!gebruikersnaamInput.value || !EmailInput.value || !WachtwoordInput.value || !firstnameInput.value || !lastnameInput.value) {
+        // Toon een foutmelding of voer andere acties uit als de voorwaarden niet zijn voldaan
+        console.log("Vul alle velden in voordat u registreert.");
+        return;
+    }
+
+    const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(EmailInput.value)) {
+        // Toon een foutmelding of voer andere acties uit als het e-mailadres niet geldig is
+        console.log("Voer een geldig e-mailadres in.");
+        return;
+    }
+
+    // Voer wachtwoordvalidatie uit
+    const passwordRegex: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(WachtwoordInput.value)) {
+        // Toon een foutmelding of voer andere acties uit als het wachtwoord niet geldig is
+        console.log("Het wachtwoord moet minimaal 8 tekens lang zijn en minimaal één letter en één cijfer bevatten.");
+        return;
+    }
 
     // Hier worden de ingevulde velden naar de database gestuurd met de "INSERT INTO" functie. De console log
     // geeft vervolgens de "account is aangemaakt" melding.
