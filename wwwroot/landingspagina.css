@@ -51,14 +51,36 @@ p{
   }
 
 a{
-    display: inline-block;
+  display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
   text-align: center;
   text-decoration: none;
   background-color:grey;
-  color: #fff; /* Witte tekstkleur */
-  border-radius: 5px; /* Afgeronde hoeken */
+  color: #fff;
+  border-radius: 5px; 
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color .3s ease;
+}
+
+h1{
+    background-color: #040404;
+    padding: 20px;
+    text-align: right;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-top: -7px;
+}   
+
+.logoutBtn{
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    background-color: grey;
+    color: #fff;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color .3s ease;
 }

@@ -10,3 +10,4 @@ function toggleNav():void {
 // Dit zorg ervoor dat alle knoppen met het id toggle-button worden opgeroepen om de functie uit te voeren
 document.querySelectorAll<HTMLButtonElement>(".toggle-button")
 .forEach((button: HTMLButtonElement) => button.addEventListener("click", toggleNav));
+
