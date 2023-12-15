@@ -50,6 +50,5 @@ function createUser(): void {
 
 // Dit is betreft de registreerknop op de website. Deze lijn code reageert als de user op de knop drukt
 // en activeerd de CreateUser functie die hierboven staat.
-
 const registreerknop: HTMLButtonElement = document.querySelector("#registreerButton") as HTMLButtonElement;
 registreerknop.addEventListener("click", createUser);
