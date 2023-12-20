@@ -1,0 +1,86 @@
+body{
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: gray;
+    color: beige;
+}
+
+.toggle-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.navigation {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.navigation ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navigation li {
+    padding: 15px;
+    text-align: center;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+
+p{
+    background-color: rgb(0, 0, 0);
+    width: 1500px;
+    padding: 20px;
+    margin: auto;
+    text-align: right;
+  }
+
+a{
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  background-color:grey;
+  color: #fff;
+  border-radius: 5px; 
+  cursor: pointer;
+  transition: background-color .3s ease;
+}
+
+h1{
+    background-color: #040404;
+    padding: 20px;
+    text-align: right;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-top: -7px;
+}   
+
+.logoutBtn{
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    background-color: grey;
+    color: #fff;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color .3s ease;
+}
