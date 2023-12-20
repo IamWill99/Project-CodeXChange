@@ -66,7 +66,7 @@ setup();
 // waar de gebruiker zijn/haar naam, email en wachtwoord invult. Deze gegevens worden vervolgens opgeslagen
 // in de database. Zo kunnen ze deze gegevens gebruiken om later in te loggen.
 
-function createUser(): void {
+async function createUser(): Promise<void> {
     const gebruikersnaamInput: HTMLInputElement = document.querySelector("#usernameregistreer") as HTMLInputElement;
     const gebruikersnaam: string = gebruikersnaamInput.value;
     const EmailInput: HTMLInputElement = document.querySelector("#emailregistreer") as HTMLInputElement;
@@ -79,22 +79,23 @@ function createUser(): void {
     const lastname: string = lastnameInput.value;
 
     if (!gebruikersnaamInput.value || !EmailInput.value || !WachtwoordInput.value || !firstnameInput.value || !lastnameInput.value) {
-        // Toon een foutmelding of voer andere acties uit als de voorwaarden niet zijn voldaan
+        // Een foutmelding komt tevoorschijn wanneer één of meer velden incorrect zijn ingevuld. 
         console.log("Vul alle velden in voordat u registreert.");
         return;
     }
 
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(EmailInput.value)) {
-        // Toon een foutmelding of voer andere acties uit als het e-mailadres niet geldig is
+        // Hier worden eisen gesteld bij het invullen van een emailadres bij de registratie. 
         console.log("Voer een geldig e-mailadres in.");
         return;
     }
 
-    // Voer wachtwoordvalidatie uit
+
+
     const passwordRegex: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     if (!passwordRegex.test(WachtwoordInput.value)) {
-        // Toon een foutmelding of voer andere acties uit als het wachtwoord niet geldig is
+        // Hier worden eisen gesteld bij het invullen van een wachtwoord bij de registratie.
         console.log("Het wachtwoord moet minimaal 8 tekens lang zijn en minimaal één letter en één cijfer bevatten.");
         return;
     }
