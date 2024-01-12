@@ -17,17 +17,30 @@ class Question {
     private _userId: number;
     private _question: string;
     private _questionSnippet: string;
-    private _questionDate: Date;
 
-    public constructor(id: number, userId: number, question: string, questionSnippet: string, questionDate: Date) {
+    public constructor(id: number, userId: number, question: string, questionSnippet: string) {
         this._id = id;
         this._userId = userId;
         this._question = question;
         this._questionSnippet = questionSnippet;
-        this._questionDate = questionDate;
     }
 
-    
+    public get id(): number  {
+        return this._id;
+    }
+ 
+    public set id(id: number) {
+        this._id = id;
+    }
+
+    public get userId(): number  {
+        return this._userId;
+    }
+ 
+    public set userId(userId: number) {
+        this._userId = userId;
+    }
+
     public get question(): string  {
         return this._question;
     }
@@ -36,12 +49,18 @@ class Question {
         this._question = question;
     }
 
-}
+    public get questionSnippet(): string  {
+        return this._questionSnippet;
+    }
  
+    public set questionsnippet(questionSnippet: string) {
+        this._questionSnippet = questionSnippet;
+    }
 
+} 
 
-
-
+const vraag: Question = new Question(1, 2, "hallo", "doei");
+console.log(vraag.id, vraag.userId, vraag.question, vraag.questionSnippet);
 
 
 
