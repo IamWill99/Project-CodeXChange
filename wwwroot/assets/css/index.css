@@ -1,9 +1,8 @@
 body {
-    font-size: 1.2em;
-    background-color: #0e0224;
-    background-image: url(/assets/img/background.jpg) !important;
+    font-size: 1.5em;
+    background-color: #111;
     color: #fff;
-    font-family: "Roboto", sans-serif;
+    font-family: monospace;
     margin: 0;
     padding: 0;
 }
@@ -20,11 +19,19 @@ body {
 .registreer-box {
     display: flex;
     justify-content: center;
+    position: absolute;
+    left: 25%;
+    width: 700x;
+    box-sizing: border-box;
+}
+
+.form-control {
+    width: 510px;
 }
 
 a{
     display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 25px;
     font-size: 16px;
     text-align: center;
     text-decoration: none;
@@ -34,3 +41,33 @@ a{
     cursor: pointer;
     transition: background-color .3s ease;
   }
+
+.login-btn {
+    background-color: rgb(46, 4, 100);
+    border: none;
+}
+
+.login-btn:hover {
+    background-color:rgb(34, 4, 73) ;
+    transition: 0.5s;
+}
+
+.registreer-btn {
+    background-color: rgb(46, 4, 100);
+    border: none;
+    margin-bottom: 30px;
+}
+
+.registreer-btn:hover {
+    background-color:rgb(34, 4, 73) ;
+    transition: 0.5s;
+}
+
+h2 {
+    text-decoration: underline;
+}
+
+.homepaginalink {
+    border: none;
+    background-color: transparent;
+}

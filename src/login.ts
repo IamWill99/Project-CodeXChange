@@ -96,7 +96,8 @@ async function createUser(): Promise<void> {
     const passwordRegex: RegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     if (!passwordRegex.test(WachtwoordInput.value)) {
         // Hier worden eisen gesteld bij het invullen van een wachtwoord bij de registratie.
-        console.log("Het wachtwoord moet minimaal 8 tekens lang zijn en minimaal één letter en één cijfer bevatten.");
+        window.alert("Het wachtwoord moet minimaal 8 tekens lang zijn en minimaal één letter en één cijfer bevatten.");
+        event.preventDefault();
         return;
     }
 
