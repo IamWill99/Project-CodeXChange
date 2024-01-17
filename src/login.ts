@@ -48,7 +48,7 @@ class VraagCreator {
 // Maak een instantie van de klasse VraagCreator
 const vraagCreator: VraagCreator = new VraagCreator();
 
-// Eventlistener toevoegen
+// Hier wordt de actie uitgevoerd wanneer er op de knop gedrukt wordt.
 const vraagKnop: HTMLButtonElement | null = document.querySelector("#vraagbutton");
 if (vraagKnop) {
     vraagKnop.addEventListener("click", () => vraagCreator.createVraag());
