@@ -29,16 +29,18 @@
         </div>
     
         <div class="homepaginatekst">
-            <h2>Welkom Gebruiker</h2>
+            <h2>Vragen van de community</h2>
             
         </div>
     <br><br><br>
         <div>
 
             <form class="vraag">
-                <label for="vraag">vraag:</label><br>
-                <input class="vraagveld" type="text" id="vraagInput" name="question"><br>
-                <input id=submit type="submit" value="submit">
+                <label for="vraagstellen">Stel je vraag:</label>
+                <input type="text" placeholder="Je vraag" id="vraagstellen" required minlength="1" maxlength="1000">
+                <label for="vraagsnippet">Codesnippet</label>
+                <input type="text" placeholder="je code" id="vraagsnippet">
+                <button class="vraagbutton" id="vraagbutton" type="submit">Posten</button>
             </form> 
 
         </div>
