@@ -137,3 +137,4 @@ function createQuestion(): void {
 const submit: HTMLButtonElement = document.querySelector("#submit") as HTMLButtonElement;
 submit.addEventListener("click", createQuestion);
   
+
