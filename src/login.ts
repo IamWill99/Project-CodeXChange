@@ -1,6 +1,17 @@
 import "./config";
 import { api, session, url } from "@hboictcloud/api";
 
+
+function toggleNav():void {
+    const navbar: HTMLDivElement = document.querySelector(".navigation") as HTMLDivElement;
+    navbar.style.width = navbar.style.width === "200px" ? "0" : "200px" ;
+}
+// Dit zorg ervoor dat alle knoppen met het id toggle-button worden opgeroepen om de functie uit te voeren
+document.querySelectorAll<HTMLButtonElement>(".toggle-button")
+    .forEach((button: HTMLButtonElement) => button.addEventListener("click", toggleNav));
+
+
+
 /**
  * Deze methode wordt aangeroepen als de pagina is geladen, dat gebeurt helemaal onderin!
  */
@@ -114,5 +125,6 @@ async function createUser(): Promise<void> {
 
 const registreerknop: HTMLButtonElement = document.querySelector("#registreerButton") as HTMLButtonElement;
 registreerknop.addEventListener("click", createUser);
+
 
 
