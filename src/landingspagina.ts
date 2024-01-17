@@ -125,16 +125,6 @@ const antwoord: Answer = new Answer(1, 2, 3,"gegrh", "dsfgbh");
 console.log(antwoord.id, antwoord.userId, antwoord.questionId, antwoord.answer, antwoord.answerSnippet);
 
 
-function createQuestion(): void {
-    const submitQuestion: HTMLInputElement = document.querySelector("#vraag") as HTMLInputElement;
-    const vraag: string = submitQuestion.value;
 
-    const question: string = "INSERT INTO question (ID, UserID, Question, Questionsnippet) VALUES (?, ?, ?, ?)";
-    api.queryDatabase(ID, UserID, Question, Questionsnippet);
-    console.log(ID, UserID, Question, Questionsnippet);
-}
-
-const submit: HTMLButtonElement = document.querySelector("#submit") as HTMLButtonElement;
-submit.addEventListener("click", createQuestion);
   
 
