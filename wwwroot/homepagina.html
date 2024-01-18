@@ -34,22 +34,25 @@
         </div>
     <br><br><br>
         <div>
-
             <form class="vraag">
                 <label for="vraagstellen">Stel je vraag:</label>
                 <input type="text" placeholder="Je vraag" id="vraagstellen" required minlength="1" maxlength="1000">
                 <br><br>
-                <label for="vraagsnippet">Codesnippet</label>
-
+                <label for="vraagsnippet">Codesnippet</label><br><br>
                 <textarea placeholder="je code" id="vraagsnippet"> </textarea>
                 <br><br>
                 <button class="vraagbutton" id="vraagbutton" type="submit">Posten</button>
             </form> 
+        </div>`
 
-            
-        </div>
-    
-        <script src="/src/login.ts" type="module"></script>
+        <form class="vragenvananderen">
+            <label>al gestelde vragen:</label>
+        </form>
+        <h1>User Questions</h1>
+    <ul id="questionList"></ul>
+
+
+        <script src="/src/question.ts" type="module"></script>
     </body>
     
     </html>

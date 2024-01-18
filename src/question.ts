@@ -56,3 +56,26 @@ const vraagKnop: HTMLButtonElement | null = document.querySelector("#vraagbutton
 if (vraagKnop) {
     vraagKnop.addEventListener("click", () => vraagCreator.createVraag());
 }
+
+class vraagDisplay{
+    public _ID: HTMLOutputElement;
+    public _UserID: HTMLOutputElement;
+    public _question: HTMLOutputElement;
+    public _questionSnippet: HTMLOutputElement;
+
+    public constructor() {
+        this._ID = document.querySelector("#ID") as HTMLOutputElement;
+        this._UserID = document.querySelector("#UserID") as HTMLOutputElement;
+        this._question = document.querySelector("#question") as HTMLOutputElement;
+        this._questionSnippet = document.querySelector("#questionSnippet") as HTMLOutputElement;
+    }
+
+    public laatvraagzien(){
+
+        
+
+        const getVraag: string = "SELECT FROM question (ID, UserID, Question, Questionsnippet) VALUES (?, ?, ?, ?)";
+        api.queryDatabase(getVraag, this._ID, this._UserID, this._question, this._questionSnippet);
+        console.log("vragen worden laten zien.");
+    }
+}

@@ -129,7 +129,3 @@ class Answer {
 const antwoord: Answer = new Answer(1, 2, 3,"gegrh", "dsfgbh");
 console.log(antwoord.id, antwoord.userId, antwoord.questionId, antwoord.answer, antwoord.answerSnippet);
 
-
-
-  
-
