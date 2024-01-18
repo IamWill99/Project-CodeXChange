@@ -57,25 +57,55 @@ if (vraagKnop) {
     vraagKnop.addEventListener("click", () => vraagCreator.createVraag());
 }
 
-class vraagDisplay{
+class VraagDisplay {
     public _ID: HTMLOutputElement;
     public _UserID: HTMLOutputElement;
     public _question: HTMLOutputElement;
     public _questionSnippet: HTMLOutputElement;
 
     public constructor() {
-        this._ID = document.querySelector("#ID") as HTMLOutputElement;
-        this._UserID = document.querySelector("#UserID") as HTMLOutputElement;
-        this._question = document.querySelector("#question") as HTMLOutputElement;
-        this._questionSnippet = document.querySelector("#questionSnippet") as HTMLOutputElement;
+        this._ID = this.getElement("#ID");
+        this._UserID = this.getElement("#UserID");
+        this._question = this.getElement("#question");
+        this._questionSnippet = this.getElement("#questionSnippet");
     }
 
-    public laatvraagzien(){
+    private getElement(selector: string): HTMLOutputElement {
+        const element: HTMLOutputElement | null = document.querySelector(selector);
+        if (!element) {
+            throw new Error(`Element with selector ${selector} not found.`);
+        }
+        return element;
+    }
 
-        
+    public async laatVraagZien(): Promise<void> {
+        try {
+            const vraagData: any = await this.fetchVraagData();
+            this.setToHtmlElements(vraagData);
+            console.log("Vragen worden laten zien.");
+        } catch (error: any) {
+            console.error("Er is een fout opgetreden");
+        }
+    }
 
-        const getVraag: string = "SELECT FROM question (ID, UserID, Question, Questionsnippet) VALUES (?, ?, ?, ?)";
-        api.queryDatabase(getVraag, this._ID, this._UserID, this._question, this._questionSnippet);
-        console.log("vragen worden laten zien.");
+    private async fetchVraagData(): Promise<any> {
+        const vraagQuery: string = "/api/getQuestion"; // URL voor het ophalen van vraaggegevens
+        const response: Response = await fetch(vraagQuery);
+        if (!response.ok) {
+            throw new Error(`Fout bij het ophalen van vraaggegevens: ${response.status}`);
+        }
+        return await response.json();
+    }
+
+    private setToHtmlElements(vraagData: any): void {
+        // Pas dit aan op basis van de structuur van je vraagData-object.
+        this._ID.innerHTML = String(vraagData.ID);
+        this._UserID.innerHTML = String(vraagData.UserID);
+        this._question.innerHTML = String(vraagData.Question);
+        this._questionSnippet.innerHTML = String(vraagData.Questionsnippet);
     }
 }
+
+// Voorbeeldgebruik van de VraagDisplay-klasse.
+const vraagDisplay: VraagDisplay = new VraagDisplay();
+vraagDisplay.laatVraagZien();
