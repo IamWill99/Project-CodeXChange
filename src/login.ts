@@ -10,16 +10,16 @@ function toggleNav():void {
 // Dit zorg ervoor dat alle knoppen met het id toggle-button worden opgeroepen om de functie uit te voeren
 document.querySelectorAll<HTMLButtonElement>(".toggle-button")
     .forEach((button: HTMLButtonElement) => button.addEventListener("click", toggleNav));
-    
+
 
 // Functie om een vraag te creëren en de UserID te gebruiken zodat we weten wie de vraag heeft gesteld
 class VraagCreator {
     private vraagInput: HTMLInputElement;
-    private vraagSnippetInput: HTMLInputElement;
+    private vraagSnippetInput: HTMLTextAreaElement;
 
     public constructor() {
         this.vraagInput = document.querySelector("#vraagstellen") as HTMLInputElement;
-        this.vraagSnippetInput = document.querySelector("#vraagsnippet") as HTMLInputElement;
+        this.vraagSnippetInput = document.querySelector("#vraagsnippet") as HTMLTextAreaElement;
     }
 
     private getLoggedInUserID(): string | null {
@@ -38,7 +38,6 @@ class VraagCreator {
             console.log("Gebruiker is niet ingelogd.");
             return;
         }
-
         const maakVraagAan: string = "INSERT INTO question (UserID, Question, Questionsnippet) VALUES (?, ?, ?)";
         api.queryDatabase(maakVraagAan, userID, vraag, vraagSnippet);
         console.log("Nieuwe vraag is aangemaakt.");
