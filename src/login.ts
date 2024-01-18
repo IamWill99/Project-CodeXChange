@@ -15,11 +15,11 @@ document.querySelectorAll<HTMLButtonElement>(".toggle-button")
 // Functie om een vraag te creëren en de UserID te gebruiken zodat we weten wie de vraag heeft gesteld
 class VraagCreator {
     private vraagInput: HTMLInputElement;
-    private vraagSnippetInput: HTMLInputElement;
+    private vraagSnippetInput: HTMLTextAreaElement;
 
     public constructor() {
         this.vraagInput = document.querySelector("#vraagstellen") as HTMLInputElement;
-        this.vraagSnippetInput = document.querySelector("#vraagsnippet") as HTMLInputElement;
+        this.vraagSnippetInput = document.querySelector("#vraagsnippet") as HTMLTextAreaElement;
     }
 
     private getLoggedInUserID(): string | null {
@@ -35,9 +35,12 @@ class VraagCreator {
         const userID: string | null = this.getLoggedInUserID();
         // Als voor één of andere reden de User niet is ingelogd, dan wordt er een console log achter gelaten
         if (!userID) {
-            console.log("Gebruiker is niet ingelogd.");
+            alert("Gebruiker is niet ingelogd.");
             return;
         }
+
+        console.log("text");
+        console.log(vraagSnippet);
 
         const maakVraagAan: string = "INSERT INTO question (UserID, Question, Questionsnippet) VALUES (?, ?, ?)";
         api.queryDatabase(maakVraagAan, userID, vraag, vraagSnippet);
@@ -151,7 +154,9 @@ async function createUser(): Promise<void> {
     if (!passwordRegex.test(WachtwoordInput.value)) {
         // Hier worden eisen gesteld bij het invullen van een wachtwoord bij de registratie.
         window.alert("Het wachtwoord moet minimaal 8 tekens lang zijn en minimaal één letter en één cijfer bevatten.");
+        console.log("fingers crossed");
         event.preventDefault();
+        console.log("party");
         return;
     }
 
