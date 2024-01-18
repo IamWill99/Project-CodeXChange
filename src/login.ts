@@ -55,9 +55,6 @@ if (vraagKnop) {
 }
 
 
-
-
-
 /**
  * Deze methode wordt aangeroepen als de pagina is geladen, dat gebeurt helemaal onderin!
  */
