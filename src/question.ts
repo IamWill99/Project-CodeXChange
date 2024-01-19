@@ -16,11 +16,15 @@ document.querySelectorAll<HTMLButtonElement>(".toggle-button")
 class VraagCreator {
     private vraagInput: HTMLInputElement;
     private vraagSnippetInput: HTMLTextAreaElement;
+    
 
     public constructor() {
         this.vraagInput = document.querySelector("#vraagstellen") as HTMLInputElement;
         this.vraagSnippetInput = document.querySelector("#vraagsnippet") as HTMLTextAreaElement;
+
     }
+
+    
 
     private getLoggedInUserID(): string | null {
 
@@ -47,8 +51,13 @@ class VraagCreator {
         api.queryDatabase(maakVraagAan, userID, vraag, vraagSnippet);
         console.log("Nieuwe vraag is aangemaakt.");
         // deze code is om de ingevuld gegevens in de database op te slaan het word dus in de question tabel opgeslagen
+    
     }
+
+    
+    
 }
+
 
 // Maak een instantie van de klasse VraagCreator
 const vraagCreator: VraagCreator = new VraagCreator();
@@ -58,6 +67,11 @@ const vraagKnop: HTMLButtonElement | null = document.querySelector("#vraagbutton
 if (vraagKnop) {
     vraagKnop.addEventListener("click", () => vraagCreator.createVraag());
 }
+
+
+
+
+
 
 class VraagDisplay {
     public _ID: string;
@@ -126,3 +140,6 @@ const data: any = vraaglatenzien.addEventListener("click", vraagDisplay.fetchVra
 
 const questionElement: any = document.getElementById("question") as HTMLTextAreaElement;
 questionElement.value = "";
+
+
+
