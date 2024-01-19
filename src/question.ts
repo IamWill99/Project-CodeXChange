@@ -3,14 +3,14 @@ import { api, session, url } from "@hboictcloud/api";
 
 // Deze functie zorgt voor een werkende menubalk.
 
-function toggleNav():void {
+function toggleNav(): void {
     const navbar: HTMLDivElement = document.querySelector(".navigation") as HTMLDivElement;
-    navbar.style.width = navbar.style.width === "200px" ? "0" : "200px" ;
+    navbar.style.width = navbar.style.width === "200px" ? "0" : "200px";
 }
 // Dit zorg ervoor dat alle knoppen met het id toggle-button worden opgeroepen om de functie uit te voeren
 document.querySelectorAll<HTMLButtonElement>(".toggle-button")
     .forEach((button: HTMLButtonElement) => button.addEventListener("click", toggleNav));
-    
+
 
 // Functie om een vraag te creëren en de UserID te gebruiken zodat we weten wie de vraag heeft gesteld
 class VraagCreator {
@@ -23,9 +23,10 @@ class VraagCreator {
     }
 
     private getLoggedInUserID(): string | null {
-        
+
         return session.get("user") || null;
     }
+    //dit zorgt ervoor dat de ID van de user wordt opgehaald zodat je weet wie de vraag schrijft
 
     public createVraag(): void {
         const vraag: string = this.vraagInput.value;
@@ -33,7 +34,7 @@ class VraagCreator {
 
         // Ophalen ID van gebruiker uit de sessie
         const userID: string | null = this.getLoggedInUserID();
-        // Als voor één of andere reden de User niet is ingelogd, dan wordt er een console log achter gelaten
+        // Als voor één of andere reden de User niet is ingelogd, dan wordt er een console log achter gelaten waarin staat dat de user niet ingelogd is
         if (!userID) {
             alert("Gebruiker is niet ingelogd.");
             return;
@@ -45,6 +46,7 @@ class VraagCreator {
         const maakVraagAan: string = "INSERT INTO question (UserID, Question, Questionsnippet) VALUES (?, ?, ?)";
         api.queryDatabase(maakVraagAan, userID, vraag, vraagSnippet);
         console.log("Nieuwe vraag is aangemaakt.");
+        // deze code is om de ingevuld gegevens in de database op te slaan het word dus in de question tabel opgeslagen
     }
 }
 
@@ -58,20 +60,24 @@ if (vraagKnop) {
 }
 
 class VraagDisplay {
-    public _ID: HTMLOutputElement;
-    public _UserID: HTMLOutputElement;
-    public _question: HTMLOutputElement;
-    public _questionSnippet: HTMLOutputElement;
+    public _ID: string;
+    public _UserID: string;
+    public _question: HTMLTextAreaElement;
+    public _questionSnippet: HTMLTextAreaElement;
 
     public constructor() {
-        this._ID = this.getElement("#ID");
-        this._UserID = this.getElement("#UserID");
+        this._ID = "";
+        this._UserID = session.get("user");
+        console.log(this._UserID);
+        
         this._question = this.getElement("#question");
         this._questionSnippet = this.getElement("#questionSnippet");
     }
 
-    private getElement(selector: string): HTMLOutputElement {
-        const element: HTMLOutputElement | null = document.querySelector(selector);
+    private getElement(selector: string): HTMLTextAreaElement {
+        console.log(selector);
+        
+        const element: HTMLTextAreaElement | null = document.querySelector(selector);
         if (!element) {
             throw new Error(`Element with selector ${selector} not found.`);
         }
@@ -80,32 +86,43 @@ class VraagDisplay {
 
     public async laatVraagZien(): Promise<void> {
         try {
-            const vraagData: any = await this.fetchVraagData();
-            this.setToHtmlElements(vraagData);
+            
+            const vraagophalen: string = "SELECT * FROM question WHERE UserID = 1";
+            const response: any = await api.queryDatabase(vraagophalen, this._ID, this._UserID, this._question, this._questionSnippet);
+            // const vraagData: any = await this.fetchVraagData();
+            // console.log(document.querySelectorAll("#question"));
+            console.log(response);
+            console.log(this._question);
+            
+            this._question.value = response[0].Question;
+                        
+            
             console.log("Vragen worden laten zien.");
         } catch (error: any) {
             console.error("Er is een fout opgetreden");
+            console.error(error);
         }
     }
 
-    private async fetchVraagData(): Promise<any> {
-        const vraagQuery: string = "/api/getQuestion"; // URL voor het ophalen van vraaggegevens
-        const response: Response = await fetch(vraagQuery);
-        if (!response.ok) {
-            throw new Error(`Fout bij het ophalen van vraaggegevens: ${response.status}`);
-        }
-        return await response.json();
+    public async fetchVraagData(): Promise<any> {
+        const vraagophalen: string = "SELECT * FROM question WHERE UserID = 1";
+        const response: any = await api.queryDatabase(vraagophalen, this._ID, this._UserID, this._question, this._questionSnippet);
+        // code voor het ophalen van de gestelde vragen
+        //  = await fetch(vraagophalen);
+        // console.log(response);
+        console.log(response);
+        
+        return response;
     }
 
-    private setToHtmlElements(vraagData: any): void {
-        // Pas dit aan op basis van de structuur van je vraagData-object.
-        this._ID.innerHTML = String(vraagData.ID);
-        this._UserID.innerHTML = String(vraagData.UserID);
-        this._question.innerHTML = String(vraagData.Question);
-        this._questionSnippet.innerHTML = String(vraagData.Questionsnippet);
-    }
 }
 
-// Voorbeeldgebruik van de VraagDisplay-klasse.
-const vraagDisplay: VraagDisplay = new VraagDisplay();
-vraagDisplay.laatVraagZien();
+
+// Hier wordt de actie uitgevoerd wanneer er op de knop gedrukt wordt.
+const vraaglatenzien: HTMLButtonElement = document.querySelector("#vraagzien") as HTMLButtonElement;
+const vraagDisplay: VraagDisplay = new VraagDisplay;
+const data: any = vraaglatenzien.addEventListener("click", vraagDisplay.fetchVraagData);
+
+
+const questionElement: any = document.getElementById("question") as HTMLTextAreaElement;
+questionElement.value = "";
