@@ -30,6 +30,7 @@ function setup(): void {
                 // Maak user object aan met de waarden uit de database
                 // Sla de gebruikersgegevens op in een sessie
                 session.set("user", data[0].id);
+                session.set("username", username,);
 
                 // Stuur de gebruiker door naar de homepagina
                 url.redirect("/index.html");
@@ -61,6 +62,8 @@ async function loginFromDatabase(username: string, password: string): Promise<Ar
             "SELECT id FROM user WHERE username = ? AND password = ?",
             username,
             password
+
+            
         );
 
         return data;

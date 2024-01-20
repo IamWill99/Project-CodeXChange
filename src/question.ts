@@ -21,23 +21,71 @@ class VraagCreator {
     public constructor() {
         this.vraagInput = document.querySelector("#vraagstellen") as HTMLInputElement;
         this.vraagSnippetInput = document.querySelector("#vraagsnippet") as HTMLTextAreaElement;
-
     }
 
-    
+    public async loadVragen(): Promise<void> {
+        // Haal vragen en username op uit de database, zodat we kunnen kijken wie de vraag heeft gesteld
+        const vragen: any = await api.queryDatabase(`
+        SELECT question.*
+        FROM question
+    `);
 
+        //toon de vragen op de pagina
+        this.displayVragen(vragen);
+    } 
+
+    private displayVragen(vragen: any[]): void {
+        // Container waarin de vragen worden weergegeven
+        const vragenContainer: HTMLElement | null = document.querySelector("#vragenContainer");
+
+        if (vragenContainer) {
+            // Maak voor elke vraag een nieuw HTML-element aan
+            vragen.forEach((vraag: any) => {
+                const vraagElement: HTMLElement = document.createElement("div");
+                vraagElement.className = "vraag-item";
+
+                vraagElement.innerHTML = `
+                    <p class="username-text"><strong>Gebruikersnaam:</strong> ${vraag.username}</p>
+                    <p><strong>Vraag:</strong> ${vraag.Question}</p>
+                    <p><strong>Codesnippet:</strong> ${vraag.Questionsnippet}</p>
+                    <hr>
+                `;
+
+                const codeSnippetParagraph: HTMLElement | null = vraagElement.querySelector(".code-snippet-text");
+                if (codeSnippetParagraph) {
+                    codeSnippetParagraph.textContent = vraag.Questionsnippet;
+                }
+
+                // Voeg het nieuwe element toe aan de container
+                vragenContainer.appendChild(vraagElement);
+            });
+        }
+    }
+
+    //dit zorgt ervoor dat de ID van de user wordt opgehaald zodat je weet wie de vraag schrijft
     private getLoggedInUserID(): string | null {
 
         return session.get("user") || null;
     }
-    //dit zorgt ervoor dat de ID van de user wordt opgehaald zodat je weet wie de vraag schrijft
+    
 
     public createVraag(): void {
         const vraag: string = this.vraagInput.value;
         const vraagSnippet: string = this.vraagSnippetInput.value;
 
+        // Ophalen gebruikersnaam uit de sessie
+        const username: string | null = session.get("username");
+
+        // Als voor één of andere reden de gebruikersnaam niet beschikbaar is, geef een foutmelding
+        if (!username) {
+            alert("Gebruikersnaam is niet beschikbaar.");
+            return;
+        }
+
+
         // Ophalen ID van gebruiker uit de sessie
         const userID: string | null = this.getLoggedInUserID();
+
         // Als voor één of andere reden de User niet is ingelogd, dan wordt er een console log achter gelaten waarin staat dat de user niet ingelogd is
         if (!userID) {
             alert("Gebruiker is niet ingelogd.");
@@ -46,100 +94,35 @@ class VraagCreator {
 
         console.log("text");
         console.log(vraagSnippet);
-
-        const maakVraagAan: string = "INSERT INTO question (UserID, Question, Questionsnippet) VALUES (?, ?, ?)";
-        api.queryDatabase(maakVraagAan, userID, vraag, vraagSnippet);
-        console.log("Nieuwe vraag is aangemaakt.");
+        
         // deze code is om de ingevuld gegevens in de database op te slaan het word dus in de question tabel opgeslagen
-    
+        const maakVraagAan: string = "INSERT INTO question (UserID, Question, Questionsnippet, username) VALUES (?, ?, ?, ?)";
+        api.queryDatabase(maakVraagAan, userID, vraag, vraagSnippet, username);
+
+
+        console.log("Nieuwe vraag is aangemaakt.");
+        
+        
+
     }
 
-    
-    
+
+
+            
 }
 
-
+        
 // Maak een instantie van de klasse VraagCreator
 const vraagCreator: VraagCreator = new VraagCreator();
+
+document.addEventListener("DOMContentLoaded", () => vraagCreator.loadVragen());
+
 
 // Hier wordt de actie uitgevoerd wanneer er op de knop gedrukt wordt.
 const vraagKnop: HTMLButtonElement | null = document.querySelector("#vraagbutton");
 if (vraagKnop) {
     vraagKnop.addEventListener("click", () => vraagCreator.createVraag());
 }
-
-
-
-
-
-
-class VraagDisplay {
-    public _ID: string;
-    public _UserID: string;
-    public _question: HTMLTextAreaElement;
-    public _questionSnippet: HTMLTextAreaElement;
-
-    public constructor() {
-        this._ID = "";
-        this._UserID = session.get("user");
-        console.log(this._UserID);
-        
-        this._question = this.getElement("#question");
-        this._questionSnippet = this.getElement("#questionSnippet");
-    }
-
-    private getElement(selector: string): HTMLTextAreaElement {
-        console.log(selector);
-        
-        const element: HTMLTextAreaElement | null = document.querySelector(selector);
-        if (!element) {
-            throw new Error(`Element with selector ${selector} not found.`);
-        }
-        return element;
-    }
-
-    public async laatVraagZien(): Promise<void> {
-        try {
-            
-            const vraagophalen: string = "SELECT * FROM question WHERE UserID = 1";
-            const response: any = await api.queryDatabase(vraagophalen, this._ID, this._UserID, this._question, this._questionSnippet);
-            // const vraagData: any = await this.fetchVraagData();
-            // console.log(document.querySelectorAll("#question"));
-            console.log(response);
-            console.log(this._question);
-            
-            this._question.value = response[0].Question;
-                        
-            
-            console.log("Vragen worden laten zien.");
-        } catch (error: any) {
-            console.error("Er is een fout opgetreden");
-            console.error(error);
-        }
-    }
-
-    public async fetchVraagData(): Promise<any> {
-        const vraagophalen: string = "SELECT * FROM question WHERE UserID = 1";
-        const response: any = await api.queryDatabase(vraagophalen, this._ID, this._UserID, this._question, this._questionSnippet);
-        // code voor het ophalen van de gestelde vragen
-        //  = await fetch(vraagophalen);
-        // console.log(response);
-        console.log(response);
-        
-        return response;
-    }
-
-}
-
-
-// Hier wordt de actie uitgevoerd wanneer er op de knop gedrukt wordt.
-const vraaglatenzien: HTMLButtonElement = document.querySelector("#vraagzien") as HTMLButtonElement;
-const vraagDisplay: VraagDisplay = new VraagDisplay;
-const data: any = vraaglatenzien.addEventListener("click", vraagDisplay.fetchVraagData);
-
-
-const questionElement: any = document.getElementById("question") as HTMLTextAreaElement;
-questionElement.value = "";
 
 
 
