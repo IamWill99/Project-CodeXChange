@@ -296,3 +296,26 @@ h1{
     font-family: monospace;
 
 }
+
+
+.mijnvragentekst {
+    font-family: monospace;
+    position: absolute;
+    left: 50px;
+    top: 80px;
+}
+
+#mijnVragenButton {
+    background-color: rgb(46, 4, 100);
+    border: none;
+    font-family: monospace;
+    font-size: 18px;
+    padding: 10px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+#mijnVragenButton:hover {
+    background-color:rgb(34, 4, 73) ;
+    transition: 0.5s;
+}

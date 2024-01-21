@@ -32,7 +32,7 @@ class VraagCreator {
     `);
 
         //toon de vragen op de pagina
-        this.displayVragen(vragen);
+        
     } 
 
 
@@ -169,3 +169,19 @@ if (mijnVragenButton) {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Haal gebruikersnaam op uit de queryparameter
+    const queryString: string = window.location.search;
+    const urlParams: URLSearchParams = new URLSearchParams(queryString);
+    const gebruikersnaam: string | null = urlParams.get("gebruiker");
+
+    // Controleer of gebruikersnaam aanwezig is
+    if (gebruikersnaam) {
+        // Maak een nieuwe instantie van de klasse VraagCreator
+        const vraagCreator: VraagCreator = new VraagCreator();
+
+        // Roep de methode aan om vragen van de specifieke gebruiker op te halen en weer te geven
+        await vraagCreator.loadGebruikerVragen(gebruikersnaam);
+    }
+});
