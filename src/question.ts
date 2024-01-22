@@ -36,8 +36,6 @@ class VraagCreator {
     } 
 
 
-    
-
     private displayVragen(vragen: any[]): void {
         // Container waarin de vragen worden weergegeven
         const vragenContainer: HTMLElement | null = document.querySelector("#vragenContainer");
@@ -49,14 +47,22 @@ class VraagCreator {
                 vraagElement.className = "vraag-item";
 
                 const codeSnippetText: any = this.htmlEntitiesDecode(vraag.Questionsnippet);
+            
 
-                //Hier wordt letterlijk het element van de vraag en username geplaatst op de webpagina
+                //Hier wordt letterlijk het element van de vraag en username geplaatst op de webpagina.
+                //Daarbij wordt er ook een knop aangemaakt om vragen te laten zien en antwoord te geven.
                 vraagElement.innerHTML = `
-                    <p class="username-text"><u><strong>Gebruiker:</strong></u> ${vraag.username}</p>
-                    <p><strong>Vraag:</strong> ${vraag.Question}</p>
-                    <p><strong>Codesnippet:</strong> <span class="code-snippet-text">${codeSnippetText}</span></p>
-                    <hr>
-                `;
+                <p class="username-text"><u><strong>Gebruiker:</strong></u> ${vraag.username}</p>
+                <p><strong>Vraag:</strong> ${vraag.Question}</p>
+                <p><strong>Codesnippet:</strong> <span class="code-snippet-text">${codeSnippetText}</span></p>
+                <button class="antwoord-button" data-question-id="${vraag.ID}">Toon antwoorden</button>
+                <div class="antwoord-container" style="display: none;">
+                    <textarea class="antwoord-input" placeholder="Schrijf hier je antwoord"></textarea>
+                    <button class="submit-antwoord-button" data-question-id="${vraag.ID}">Antwoord plaatsen</button>
+                </div>
+                <div class="antwoorden-container"></div>
+                <hr>
+            `;
 
                 const codeSnippetParagraph: HTMLElement | null = vraagElement.querySelector(".code-snippet-text");
                 if (codeSnippetParagraph) {
@@ -65,7 +71,59 @@ class VraagCreator {
 
                 // Voeg het nieuwe element toe aan de container
                 vragenContainer.appendChild(vraagElement);
+
+                const antwoordButton: HTMLElement | null = vraagElement.querySelector(".antwoord-button");
+                const antwoordContainer: HTMLElement | null = vraagElement.querySelector(".antwoord-container");
+                const antwoordInput: HTMLTextAreaElement | null = vraagElement.querySelector(".antwoord-input");
+                const submitAntwoordButton: HTMLElement | null = vraagElement.querySelector(".submit-antwoord-button");
+                const antwoordenContainer: HTMLElement | null = vraagElement.querySelector(".antwoorden-container");
+
+                if (antwoordButton && antwoordContainer && antwoordInput && submitAntwoordButton && antwoordenContainer) {
+                    antwoordButton.addEventListener("click", () => {
+                        antwoordContainer.style.display = "block";
+                        this.loadAntwoorden(vraag.ID, antwoordenContainer);
+                    });
+
+                    submitAntwoordButton.addEventListener("click", () => {
+                        const antwoordText: string = antwoordInput.value;
+                        
+                        this.submitAntwoord(vraag.ID, antwoordText, antwoordenContainer);
+                        
+                        
+                        
+                    });
+                }    
+
             });
+        }
+    }
+
+    private async loadAntwoorden(questionID: string, antwoordenContainer: HTMLElement): Promise<void> {
+        const antwoorden: any = await api.queryDatabase(`
+            SELECT * FROM answer WHERE QuestionID = ?
+        `, questionID);
+
+        antwoordenContainer.innerHTML = "<strong>Antwoorden:</strong><br>";
+
+        antwoorden.forEach((antwoord: any) => {
+            const antwoordElement: HTMLElement = document.createElement("div");
+            antwoordElement.innerHTML = `<p><u><strong>Gebruiker ${antwoord.username}:</strong></u> ${antwoord.answer}</p>`;
+            
+            antwoordenContainer.appendChild(antwoordElement);
+        });
+    }
+
+    private async submitAntwoord(questionID: string, antwoordText: string, antwoordenContainer: HTMLElement): Promise<void> {
+        const username: string | null = session.get("username");
+        const userID: string | null = this.getLoggedInUserID();
+
+        if (username && userID) {
+            
+            const insertAntwoordQuery: string = "INSERT INTO answer (QuestionID, username, answer) VALUES (?, ?, ?)";
+            await api.queryDatabase(insertAntwoordQuery, questionID, username, antwoordText);
+            this.loadAntwoorden(questionID, antwoordenContainer);
+
+            
         }
     }
 
@@ -76,6 +134,8 @@ class VraagCreator {
         const doc:any = new DOMParser().parseFromString(input, "text/html");
         return doc.documentElement.textContent || "";
     }
+
+
 
     //dit zorgt ervoor dat de ID van de user wordt opgehaald zodat je weet wie de vraag schrijft
     private getLoggedInUserID(): string | null {
@@ -169,3 +229,5 @@ if (mijnVragenButton) {
         }
     });
 }
+
+

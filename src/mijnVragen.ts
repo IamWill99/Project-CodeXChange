@@ -52,10 +52,16 @@ class VraagCreator {
 
                 //Hier wordt letterlijk het element van de vraag en username geplaatst op de webpagina
                 vraagElement.innerHTML = `
-                    <p class="username-text"><u><strong>Gebruiker:</strong></u> ${vraag.username}</p>
-                    <p><strong>Vraag:</strong> ${vraag.Question}</p>
-                    <p><strong>Codesnippet:</strong> <span class="code-snippet-text">${codeSnippetText}</span></p>
-                    <hr>
+                <p class="username-text"><u><strong>Gebruiker:</strong></u> ${vraag.username}</p>
+                <p><strong>Vraag:</strong> ${vraag.Question}</p>
+                <p><strong>Codesnippet:</strong> <span class="code-snippet-text">${codeSnippetText}</span></p>
+                <button class="antwoord-button" data-question-id="${vraag.ID}">Toon antwoorden</button>
+                <div class="antwoord-container" style="display: none;">
+                    <textarea class="antwoord-input" id="hiddenAntwoordInput" placeholder="Schrijf hier je antwoord"></textarea>
+                    <button class="submit-antwoord-button" id="hiddenSubmitKnop" data-question-id="${vraag.ID}">Antwoord plaatsen</button>
+                </div>
+                <div class="antwoorden-container"></div>
+                <hr>
                 `;
 
                 const codeSnippetParagraph: HTMLElement | null = vraagElement.querySelector(".code-snippet-text");
@@ -65,11 +71,61 @@ class VraagCreator {
 
                 // Voeg het nieuwe element toe aan de container
                 vragenContainer.appendChild(vraagElement);
+
+                const antwoordButton: HTMLElement | null = vraagElement.querySelector(".antwoord-button");
+                const antwoordContainer: HTMLElement | null = vraagElement.querySelector(".antwoord-container");
+                const antwoordInput: HTMLTextAreaElement | null = vraagElement.querySelector(".antwoord-input");
+                const submitAntwoordButton: HTMLElement | null = vraagElement.querySelector(".submit-antwoord-button");
+                const antwoordenContainer: HTMLElement | null = vraagElement.querySelector(".antwoorden-container");
+
+                if (antwoordButton && antwoordContainer && antwoordInput && submitAntwoordButton && antwoordenContainer) {
+                    antwoordButton.addEventListener("click", () => {
+                        antwoordContainer.style.display = "block";
+                        this.loadAntwoorden(vraag.ID, antwoordenContainer);
+                    });
+
+                    submitAntwoordButton.addEventListener("click", () => {
+                        const antwoordText: string = antwoordInput.value;
+                        
+                        this.submitAntwoord(vraag.ID, antwoordText, antwoordenContainer);
+                        
+                        
+                        
+                    });
+                }    
+
             });
         }
     }
 
-    
+    private async loadAntwoorden(questionID: string, antwoordenContainer: HTMLElement): Promise<void> {
+        const antwoorden: any = await api.queryDatabase(`
+            SELECT * FROM answer WHERE QuestionID = ?
+        `, questionID);
+
+        antwoordenContainer.innerHTML = "<strong>Antwoorden:</strong><br>";
+
+        antwoorden.forEach((antwoord: any) => {
+            const antwoordElement: HTMLElement = document.createElement("div");
+            antwoordElement.innerHTML = `<p><strong>Gebruiker ${antwoord.username}:</strong> ${antwoord.answer}</p>`;
+            
+            antwoordenContainer.appendChild(antwoordElement);
+        });
+    }
+
+    private async submitAntwoord(questionID: string, antwoordText: string, antwoordenContainer: HTMLElement): Promise<void> {
+        const username: string | null = session.get("username");
+        const userID: string | null = this.getLoggedInUserID();
+
+        if (username && userID) {
+            const insertAntwoordQuery: string = "INSERT INTO answer (QuestionID, username, answer) VALUES (?, ?, ?)";
+            await api.queryDatabase(insertAntwoordQuery, questionID, username, antwoordText);
+            this.loadAntwoorden(questionID, antwoordenContainer);
+
+            
+        }
+    }
+
     // Deze functie zorgt ervoor dat de code in codesnippet niet letterlijk wordt genomen en als
     // platte tekst op de webpagina komt te staan. Zo worden er bugs voorkomen.
     private htmlEntitiesDecode(input: string): string {
