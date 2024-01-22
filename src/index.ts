@@ -65,12 +65,47 @@ async function getUserInfo(userid: number): Promise<User | undefined> {
  * De methode geeft niets terug (void) en heeft daarom geen return statement
  */
 function logout(): void {
-    // Verwijder de sessies
+    //Verwijder de sessies
     session.remove("user");
 
-    // Stuur de gebruiker door naar de login pagina
+    //Stuur de gebruiker door naar de login pagina
     url.redirect("login.html");
 }
 
-// Run bij het opstarten de setup functie
+//Run bij het opstarten de setup functie
 await setup();
+
+//Dit pakt de class van de verwijderknop in de HTML. Als je er op klikt komt er een bevestigingsscherm.
+document.querySelector(".delete-account-btn")?.addEventListener("click", showConfirmationDialog);
+
+//functie waar een popup komt die vraagt of je je account wil verwijderen. Wanneer de gebruiker op ja drukt
+//dan wordt de functie deleteAccount geactiveerd.
+async function showConfirmationDialog(): Promise<void> {
+    const confirmDelete: any = confirm("Weet je zeker dat je je account wilt verwijderen?");
+
+    if (confirmDelete) {
+        await deleteAccount();
+    }
+}
+
+//Functie om je account te verwijderen. Hij checkt de user in de sessie, dan verwijdert hij deze user uit
+//de database.
+async function deleteAccount(): Promise<void> {
+    const userId: number | undefined = session.get("user");
+
+    if (userId !== undefined) {
+        try {
+            //Verwijder de gebruiker uit de database
+            await api.queryDatabase("DELETE FROM user WHERE id = ?", userId);
+
+            //Verwijder de sessies
+            session.remove("user");
+
+
+            //Stuur de gebruiker door naar de login pagina
+            url.redirect("login.html");
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}

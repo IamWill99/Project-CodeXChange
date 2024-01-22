@@ -80,3 +80,18 @@ h2 {
     border: none;
     background-color: transparent;
 }
+
+.delete-account-btn {
+    background-color: rgb(143, 9, 9);
+    border: none;
+    font-family: monospace;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.delete-account-btn:hover {
+    background-color: rgb(112, 7, 7);
+    transition: 0.5s;
+}
