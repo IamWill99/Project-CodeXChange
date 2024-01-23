@@ -133,3 +133,18 @@ registreerknop.addEventListener("click", createUser);
 
 
 
+// Functie om je wachtwoord zichtbaar te maken voor gebruiksgemak bij inloggen en registreren
+const passwordInput: HTMLInputElement = document.getElementById("password") as HTMLInputElement;
+const passwordregistreerInput: HTMLInputElement = document.getElementById("passwordregistreer") as HTMLInputElement;
+const togglePasswordCheckbox: HTMLInputElement = document.getElementById("togglePassword") as HTMLInputElement;
+const togglePasswordRegistreerCheckbox: HTMLInputElement = document.getElementById("togglepasswordregistreer") as HTMLInputElement;
+
+togglePasswordCheckbox.addEventListener("change", function () {
+    passwordInput.type = this.checked ? "text" : "password";
+});
+
+togglePasswordRegistreerCheckbox.addEventListener("change", function () {
+    passwordregistreerInput.type = this.checked ? "text" : "password";
+});
+
+

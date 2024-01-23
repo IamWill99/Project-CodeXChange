@@ -71,19 +71,19 @@ class VraagCreator {
 
                 // Voeg het nieuwe element toe aan de container
                 vragenContainer.appendChild(vraagElement);
-
+                // constateer meerdere elementen voor het beantwoorden van een vraag.
                 const antwoordButton: HTMLElement | null = vraagElement.querySelector(".antwoord-button");
                 const antwoordContainer: HTMLElement | null = vraagElement.querySelector(".antwoord-container");
                 const antwoordInput: HTMLTextAreaElement | null = vraagElement.querySelector(".antwoord-input");
                 const submitAntwoordButton: HTMLElement | null = vraagElement.querySelector(".submit-antwoord-button");
                 const antwoordenContainer: HTMLElement | null = vraagElement.querySelector(".antwoorden-container");
-
+                //Hier worden de antwoorden en antwoordbox geladen als op de knop word gedrukt.
                 if (antwoordButton && antwoordContainer && antwoordInput && submitAntwoordButton && antwoordenContainer) {
                     antwoordButton.addEventListener("click", () => {
                         antwoordContainer.style.display = "block";
                         this.loadAntwoorden(vraag.ID, antwoordenContainer);
                     });
-
+                    //Hier worden antwoorden naar de database gestuurd, doormiddel van een functie beneden
                     submitAntwoordButton.addEventListener("click", () => {
                         const antwoordText: string = antwoordInput.value;
                         
@@ -97,6 +97,9 @@ class VraagCreator {
             });
         }
     }
+
+    //De antwoorden worden hier geladen met een query voor de database. Kijkend naar de QuestionID
+    //kan er bepaald worden welke antwoorden geladen moeten worden
 
     private async loadAntwoorden(questionID: string, antwoordenContainer: HTMLElement): Promise<void> {
         const antwoorden: any = await api.queryDatabase(`
@@ -112,7 +115,8 @@ class VraagCreator {
             antwoordenContainer.appendChild(antwoordElement);
         });
     }
-
+    //Dit is de functie waar antwoorden antwoorden naar de database gaan. Er wordt eerst gecheckt in de
+    //lokale sessie wie er ingelogd is, zodat de antwoorden gekoppeld worden aan een user.  
     private async submitAntwoord(questionID: string, antwoordText: string, antwoordenContainer: HTMLElement): Promise<void> {
         const username: string | null = session.get("username");
         const userID: string | null = this.getLoggedInUserID();
@@ -230,4 +234,15 @@ if (mijnVragenButton) {
     });
 }
 
+//test voor childclass
+class CustomVraagCreator extends VraagCreator {
+    public customLog(): void {
+        console.log("Dit is een aangepaste console-log!");
+    }
+}
 
+// Maak een instantie van de aangepaste klasse
+const customVraagCreator: CustomVraagCreator = new CustomVraagCreator();
+
+// Roep de customLog-methode aan
+customVraagCreator.customLog();

@@ -192,7 +192,21 @@ h1{
     padding: 10px;
     border-radius: 20px;
     word-spacing: -7px;
+    font-family: monospace;
 }
+
+.aboutTekstTitel1 {
+    font-size: 24px;
+    background-color:rgb(46, 4, 100);
+    width: fit-content;
+    padding: 10px;
+    border-radius: 20px;
+    word-spacing: -7px;
+    font-family: monospace;
+    margin-left: 50px;
+    
+}
+
 
 .logoutBtn {
     background-color: rgb(46, 4, 100);
@@ -327,7 +341,7 @@ h1{
 }
 
 .antwoord-button {
-    background-color: rgba(2, 184, 26, 0.651);
+    background-color: rgb(243, 169, 9);
     border: none;
     font-family: monospace;
     font-size: 18px;
@@ -339,7 +353,7 @@ h1{
 }
 
 .antwoord-button:hover{
-    background-color:rgba(5, 122, 21, 0.651) ;
+    background-color:rgba(197, 138, 9, 0.651) ;
     transition: 0.5s;
 }
 
@@ -359,7 +373,7 @@ h1{
 }
 
 .submit-antwoord-button {
-    background-color: rgba(2, 184, 26, 0.651);
+    background-color: rgb(243, 169, 9);
     border: none;
     font-family: monospace;
     font-size: 18px;
@@ -371,6 +385,6 @@ h1{
 }
 
 .submit-antwoord-button:hover {
-    background-color:rgba(5, 122, 21, 0.651) ;
+    background-color:rgba(197, 138, 9, 0.651) ;
     transition: 0.5s;
 }
