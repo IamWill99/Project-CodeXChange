@@ -114,6 +114,7 @@ async function createUser(): Promise<void> {
         console.log("fingers crossed");
         event.preventDefault();
         console.log("party");
+        location.reload();
         return;
     }
 
